@@ -14,11 +14,11 @@
   display: none; /* Hide by default */
 }
 
-.dmtform > .invalid {
+.mogiform > .invalid {
   border-color: red !important;
   margin-bottom: 0.5em;
 }
-.dmtform > input {
+.mogiform > input {
   margin-bottom: 0.3em !important;
 }
 #phone-number {

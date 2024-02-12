@@ -15,6 +15,7 @@
   <input type="text" name="date" id="date" >
 </div>
 
+<?php wp_nonce_field( 'update_custom_form_settings', 'nonce_field' ); ?>
 
     <!-- Submit Button -->
     <input type="submit" value="שליחה" class="blackbut" >

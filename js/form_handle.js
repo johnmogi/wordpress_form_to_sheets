@@ -20,9 +20,9 @@ function submitForm(event) {
   event.preventDefault();
   const form = event.currentTarget;
 
-  // Check if the form has the 'dmt' class
-  if (!form.classList.contains("dmt")) {
-    return; // Exit the function if the form doesn't have the 'dmt' class
+  // Check if the form has the 'mogi' class
+  if (!form.classList.contains("mogi")) {
+    return; // Exit the function if the form doesn't have the 'mogi' class
   }
 
   const honeypotField = form.querySelector("#mobile-phone");

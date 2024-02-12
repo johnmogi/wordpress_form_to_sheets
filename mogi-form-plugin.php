@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: 0_D.M.T_0 Custom Form Plugin
+Plugin Name: MOGI Custom Form
 Description: One Stop Google sheets light weight form.
 Version: 1.1
 Author: John Mogi
-Author Email: john@dmt-ltd.com
+Author Email: dev@johnmogi.com
 */
 
 // Initialize the plugin
@@ -22,8 +22,8 @@ add_action('init', 'custom_form_plugin_init');
 function custom_form_plugin_menu()
 {
     add_menu_page(
-        'DMT Form Management', // Page title
-        'DMT Form Management', // Menu title
+        'mogi Form Management', // Page title
+        'mogi Form Management', // Menu title
         'manage_options',      // Capability
         'custom-form-management', // Menu slug
         'custom_form_management_page', // Function to display the page content
@@ -59,20 +59,26 @@ add_action('wp_enqueue_scripts', 'custom_form_enqueue_assets');
 function custom_form_management_page()
 {
     echo '<div class="wrap">';
-    echo '<h1>DMT Form Management</h1>';
+    echo '<h1>mogi Form Management</h1>';
     echo '<p>One place to rule them all: Set your global submission handler URL below.</p>';
 
-    if (isset($_POST['submission_url'])) {
-        update_option('custom_form_submission_url', sanitize_text_field($_POST['submission_url']));
+    if ( isset( $_POST['submission_url'] ) && isset( $_POST['nonce_field'] ) && wp_verify_nonce( $_POST['nonce_field'], 'update_custom_form_settings' ) ) {
+        update_option( 'custom_form_submission_url', sanitize_text_field( $_POST['submission_url'] ) );
+        update_option( 'custom_form_submission_email', sanitize_email( $_POST['submission_email'] ) );
     }
+    
 
     $submissionUrl = get_option('custom_form_submission_url', '');
+    $submissionEmail = get_option('custom_form_submission_email', '');
+
 
     // Form for updating the Submission Handler URL
     echo '<form method="post">';
     echo '<label for="submission_url">Submission Handler URL:</label><br>';
     echo '<input type="text" id="submission_url" name="submission_url" value="' . esc_attr($submissionUrl) . '"><br>';
-    echo '<input type="submit" value="Save URL">';
+    echo '<label for="submission_email">Submission Email Address:</label><br>';
+    echo '<input type="email" id="submission_email" name="submission_email" value="' . esc_attr($submissionEmail) . '"><br>';
+    echo '<input type="submit" value="Save Settings">';
     echo '</form>';
 
     echo '<h2>Available Forms</h2>';
@@ -110,17 +116,17 @@ function custom_form_shortcode($atts)
 
 
 function handle_custom_form_ajax_submission() {
-    $email = "john@dmt-ltd.com";
+    $email = get_option('custom_form_submission_email', 'default@email.com');
     $site_name = get_bloginfo('name');
-    $subject = "ליד חדש מאתר " . $site_name;
+    $subject = "new lead from site: " . $site_name;
     $body = "";
 
   $field_mappings = array(
-        'form-identifier' => 'מזהה טופס',
-        'source' => 'נשלח מ',
-        'customer-name' => 'שם',
-        'phone-number' => 'טלפון',
-        'אני מאשר/ת קבלת חומר שיווקי' => 'אני מאשר/ת קבלת חומר שיווקי'
+        'form-identifier' => 'form-identifier',
+        'source' => 'source',
+        'customer-name' => 'customer-name',
+        'phone-number' => 'phone-number',
+        'marketing-consent' => 'marketing-consent'
     );
 
     foreach ($_POST as $key => $value) {
@@ -131,7 +137,7 @@ function handle_custom_form_ajax_submission() {
 
         // Translate field names and handle checkbox for marketing consent
         $translated_key = isset($field_mappings[$key]) ? $field_mappings[$key] : $key;
-        $translated_value = ($key === 'אני מאשר/ת קבלת חומר שיווקי' && $value === 'on') ? 'כן' : $value;
+        $translated_value = ($key === 'marketing-consent' && $value === 'on') ? 'yes' : $value;
 
         $body .= sanitize_text_field($translated_key) . ': ' . sanitize_text_field($translated_value) . "\n";
     }
@@ -158,26 +164,42 @@ add_action('wp_ajax_nopriv_submit_custom_form', 'handle_custom_form_ajax_submiss
 function handle_json_form_submission() {
     // Check if the form has been submitted
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Include the WordPress Filesystem API for file operations
+        include_once( ABSPATH . 'wp-admin/includes/file.php' );
+
+        // Initialize the WordPress Filesystem
+        WP_Filesystem();
+
+        // Get the uploads directory path
+        $uploads_dir = wp_upload_dir();
+        $filename = trailingslashit( $uploads_dir['basedir'] ) . 'submissions.json';
+
         // Handle form submission
         $data = array(
             'email' => filter_input(INPUT_POST, 'customer-email', FILTER_SANITIZE_EMAIL),
             'source' => filter_input(INPUT_POST, 'source', FILTER_SANITIZE_STRING),
-            'submitted_at' => date('Y-m-d H:i:s')
+            'submitted_at' => gmdate('Y-m-d H:i:s') // Use gmdate() instead of date()
         );
 
-        $filename = 'submissions.json'; // Specify your file path here
-        $existing_data = file_exists($filename) ? json_decode(file_get_contents($filename), true) : [];
-        $existing_data[] = $data;
-        file_put_contents($filename, json_encode($existing_data, JSON_PRETTY_PRINT));
+        // Read existing data
+        $existing_data = array();
+        if ( file_exists( $filename ) ) {
+            $existing_data = json_decode( WP_Filesystem()->get_contents( $filename ), true );
+        }
 
-        // return "<p>Submission saved.</p>";
+        // Append new data
+        $existing_data[] = $data;
+
+        // Write data back to file
+        WP_Filesystem()->put_contents( $filename, wp_json_encode( $existing_data, JSON_PRETTY_PRINT ) );
+
         echo "<p>Submission saved.</p>";
         wp_die(); // Terminate AJAX request
     } else {
         // Form has not been submitted, display the form
         ob_start();
         // Adjust the path as needed to point to your form template
-        include(plugin_dir_path(__FILE__) . 'forms/newsletter-form.php');
+        include( plugin_dir_path( __FILE__ ) . 'forms/newsletter-form.php' );
         return ob_get_clean();
     }
 }

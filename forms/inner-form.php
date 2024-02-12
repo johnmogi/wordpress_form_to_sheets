@@ -1,4 +1,4 @@
-<form class="dmt" id="<?php echo esc_attr($form_id); ?>" action="<?php echo esc_url($submissionUrl); ?>" onsubmit="submitForm(event)">
+<form class="mogi" id="<?php echo esc_attr($form_id); ?>" action="<?php echo esc_url($submissionUrl); ?>" onsubmit="submitForm(event)">
 
 
     <input type="hidden" name="form-identifier" value="sidebar-form">
@@ -22,6 +22,7 @@
 <span id="phone-error" class="error-message"></span>
 
 
+<?php wp_nonce_field( 'update_custom_form_settings', 'nonce_field' ); ?>
 
     <!-- Submit Button -->
     <input type="submit" value="שליחה">

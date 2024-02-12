@@ -42,7 +42,7 @@ To ensure that form submissions from your WordPress site are properly handled an
 == Setting Up the Submission Handler URL in WordPress ==
 After deploying the Google AppScript as a web app, follow these steps in your WordPress admin dashboard:
 
-1. Navigate to the 'DMT Form Management' page.
+1. Navigate to the 'mogi Form Management' page.
 2. Enter the URL of the deployed Google AppScript in the 'Submission Handler URL' field.
 3. Click 'Save URL' to store your settings.
 
@@ -57,7 +57,7 @@ Note: Always test your forms after setting up to ensure they are functioning cor
 
 == Usage ==
 === Setting Up the Submission Handler URL ===
-1. Navigate to the 'DMT Form Management' page in your WordPress admin dashboard.
+1. Navigate to the 'mogi Form Management' page in your WordPress admin dashboard.
 2. Enter the URL where form submissions will be sent in the 'Submission Handler URL' field.
 3. Click 'Save URL' to store your settings.
 
@@ -82,7 +82,7 @@ Yes, you can configure the Submission Handler URL to point to a script that send
 - Keep the plugin updated for the latest features and security improvements.
 
 == Support ==
-For support or inquiries, contact John Mogi at john@dmt-ltd.com.
+For support or inquiries, contact John Mogi at john@mogi-ltd.com.
 
 == Developer Information ==
 For future modifications:

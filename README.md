@@ -1,8 +1,8 @@
-#### Plugin Name: DMT Custom Form Plugin
+#### Plugin Name: mogi Custom Form Plugin
 
 **Version:** 1.0  
 **Author:** John Mogi  
-**Email:** john@dmt-ltd.com
+**Email:** john@mogi-ltd.com
 
 #### Description:
 
@@ -41,7 +41,7 @@ To ensure that form submissions from your WordPress site are properly handled an
 == Setting Up the Submission Handler URL in WordPress ==
 After deploying the Google AppScript as a web app, follow these steps in your WordPress admin dashboard:
 
-1. Navigate to the 'DMT Form Management' page.
+1. Navigate to the 'mogi Form Management' page.
 2. Enter the URL of the deployed Google AppScript in the 'Submission Handler URL' field.
 3. Click 'Save URL' to store your settings.
 
@@ -57,7 +57,7 @@ Note: Always test your forms after setting up to ensure they are functioning cor
 
 2. **Setting Up the Submission Handler URL:**
 
-   - Navigate to the 'DMT Form Management' page in your WordPress admin dashboard.
+   - Navigate to the 'mogi Form Management' page in your WordPress admin dashboard.
    - Enter the URL where form submissions will be sent in the 'Submission Handler URL' field.
    - Click 'Save URL' to store your settings.
 
@@ -90,7 +90,7 @@ If you need to make changes to the forms or functionality of this plugin in the 
 
 #### Support and Contact Information:
 
-For support or inquiries about this plugin, please contact John Mogi at john@dmt-ltd.com.
+For support or inquiries about this plugin, please contact John Mogi at john@mogi-ltd.com.
 
 ---
 
